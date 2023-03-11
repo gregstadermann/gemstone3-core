@@ -8,6 +8,7 @@ const EventEmitter = require('events');
 const Heal = require('./Heal');
 const Metadatable = require('./Metadatable');
 const { Inventory, InventoryFullError } = require('./Inventory');
+const {Logger} = require('./Logger');
 
 
 /**
@@ -181,7 +182,7 @@ class Character extends Metadatable(EventEmitter) {
   }
 
   /**
-   * Update an attribute's base value. 
+   * Update an attribute's base value.
    *
    * NOTE: You _probably_ don't want to use this the way you think you do. You should not use this
    * for any temporary modifications to an attribute, instead you should use an Effect modifier.
@@ -236,7 +237,10 @@ class Character extends Metadatable(EventEmitter) {
   initiateCombat(target, lag = 0) {
     if (!this.isInCombat()) {
       this.combatData.lag = lag;
+      Logger.verbose('Character.js Lag: ' + lag + 'ms');
       this.combatData.roundStarted = Date.now();
+
+      Logger.verbose(`Combat started for ${this.name} with ${target.name}`);
       /**
        * Fired when Character#initiateCombat is called
        * @event Character#combatStart
