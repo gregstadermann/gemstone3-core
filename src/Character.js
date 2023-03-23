@@ -8,7 +8,7 @@ const EventEmitter = require('events');
 const Heal = require('./Heal');
 const Metadatable = require('./Metadatable');
 const { Inventory, InventoryFullError } = require('./Inventory');
-const {Logger} = require('./Logger');
+const Logger = require('./Logger');
 
 
 /**
@@ -237,10 +237,10 @@ class Character extends Metadatable(EventEmitter) {
   initiateCombat(target, lag = 0) {
     if (!this.isInCombat()) {
       this.combatData.lag = lag;
-      Logger.verbose('Character.js Lag: ' + lag + 'ms');
+      //Logger.log(`[Character.js] Lag:${this.combatData.lag}`);
       this.combatData.roundStarted = Date.now();
 
-      Logger.verbose(`Combat started for ${this.name} with ${target.name}`);
+      //Logger.verbose(`[Character.js] Combat started for ${this.name} with ${target.name}`);
       /**
        * Fired when Character#initiateCombat is called
        * @event Character#combatStart
@@ -303,6 +303,8 @@ class Character extends Metadatable(EventEmitter) {
 
     this.combatants.delete(target);
     target.removeCombatant(this);
+    target.combatData.lag = 0;
+    target.combatData.lagRemaining = 0;
 
     /**
      * @event Character#combatantRemoved
@@ -328,6 +330,8 @@ class Character extends Metadatable(EventEmitter) {
     }
 
     for (const combatant of this.combatants) {
+      // Reset player lag
+      this.combatData.lag = 0;
       this.removeCombatant(combatant);
     }
   }
