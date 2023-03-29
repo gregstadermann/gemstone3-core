@@ -331,7 +331,7 @@ class Character extends Metadatable(EventEmitter) {
 
     for (const combatant of this.combatants) {
       // Reset player lag
-      this.combatData.lag = 0;
+      //this.combatData.lag = 0;
       this.removeCombatant(combatant);
     }
   }
