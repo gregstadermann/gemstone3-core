@@ -100,7 +100,6 @@ class BundleManager {
 
       // any entity in an area, including the area itself, can have behaviors so load them first
       { path: 'behaviors/', fn: 'loadBehaviors' },
-
       { path: 'channels.js', fn: 'loadChannels' },
       { path: 'commands/', fn: 'loadCommands' },
       { path: 'effects/', fn: 'loadEffects' },
@@ -108,6 +107,7 @@ class BundleManager {
       { path: 'server-events/', fn: 'loadServerEvents' },
       { path: 'player-events.js', fn: 'loadPlayerEvents' },
       { path: 'skills/', fn: 'loadSkills' },
+      { path: 'critsCrush/', fn: 'loadCritsCrush'},
     ];
 
     Logger.verbose(`LOAD: BUNDLE [\x1B[1;33m${bundle}\x1B[0m] START`);
@@ -255,6 +255,7 @@ class BundleManager {
   /**
    * @param {string} bundle
    * @param {string} areaName
+   constitution: 5
    * @param {string} areaPath
    */
   async loadArea(bundle, areaName, manifest) {
@@ -431,6 +432,8 @@ class BundleManager {
     );
   }
 
+  loadCritsCrush(bundle) {
+  }
   /**
    * @param {string} bundle
    * @param {string} channelsFile

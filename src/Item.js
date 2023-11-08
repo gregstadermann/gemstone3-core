@@ -236,7 +236,7 @@ class Item extends GameEntity {
     } else {
     // otherwise load its default inv
       this.defaultItems.forEach(defaultItemId => {
-        Logger.verbose(`\tDIST: Adding item [${defaultItemId}] to item [${this.name}]`);
+        Logger.verbose(`\tITEM: Adding item [${defaultItemId}] to item [${this.name}]`);
         const newItem = state.ItemFactory.create(this.area, defaultItemId);
         newItem.hydrate(state);
         state.ItemManager.add(newItem);

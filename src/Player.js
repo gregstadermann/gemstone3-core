@@ -42,7 +42,7 @@ class Player extends Character {
 
     // Default max inventory size config
     if (!isFinite(this.inventory.getMax())) {
-      this.inventory.setMax(Config.get('defaultMaxPlayerInventory') || 20);
+      this.inventory.setMax(Config.get('defaultMaxPlayerInventory') || 2);
     }
   }
 

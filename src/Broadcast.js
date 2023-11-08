@@ -124,7 +124,8 @@ class Broadcast {
    */
   static prompt(player, extra, wrapWidth, useColor) {
     player.socket._prompted = false;
-    Broadcast.at(player, '\r\n' + player.interpolatePrompt(player.prompt, extra) + ' ', wrapWidth, useColor);
+    //Broadcast.at(player, '\r\n' + player.interpolatePrompt(player.prompt, extra) + ' ', wrapWidth, useColor);
+    Broadcast.at(player, '\r\n>');
     let needsNewline = player.extraPrompts.size > 0;
     if (needsNewline) {
       Broadcast.sayAt(player);

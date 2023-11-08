@@ -237,8 +237,9 @@ class Character extends Metadatable(EventEmitter) {
   initiateCombat(target, lag = 0) {
     if (!this.isInCombat()) {
       this.combatData.lag = lag;
-      //Logger.log(`[Character.js] Lag:${this.combatData.lag}`);
+      Logger.verbose(`[Character.js] initiateCombat() Lag:${this.combatData.lag}`);
       this.combatData.roundStarted = Date.now();
+      Logger.verbose(`[Character.js] initiateCombat() Round started:${this.combatData.roundStarted}`);
 
       //Logger.verbose(`[Character.js] Combat started for ${this.name} with ${target.name}`);
       /**
@@ -257,7 +258,7 @@ class Character extends Metadatable(EventEmitter) {
     this.combatants.add(target);
     if (!target.isInCombat()) {
       // TODO: This hardcoded 2.5 second lag on the target needs to be refactored
-      target.initiateCombat(this, 2500);
+      target.initiateCombat(this, 5000);
     }
 
     target.addCombatant(this);
@@ -303,8 +304,8 @@ class Character extends Metadatable(EventEmitter) {
 
     this.combatants.delete(target);
     target.removeCombatant(this);
-    target.combatData.lag = 0;
-    target.combatData.lagRemaining = 0;
+    //target.combatData.lag = 0;
+    //target.combatData.lagRemaining = 0;
 
     /**
      * @event Character#combatantRemoved
@@ -482,9 +483,11 @@ class Character extends Metadatable(EventEmitter) {
    */
   _setupInventory() {
     this.inventory = this.inventory || new Inventory();
+    //console.log('this.inventory: ', this.inventory);
+    //console.log('this.inventory.getMax(): ', this.inventory.getMax());
     // Default max inventory size config
     if (!this.isNpc && !isFinite(this.inventory.getMax())) {
-      this.inventory.setMax(Config.get('defaultMaxPlayerInventory') || 20);
+      this.inventory.setMax(Config.get('defaultMaxPlayerInventory') || 2);
     }
   }
 

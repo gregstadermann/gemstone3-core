@@ -3,7 +3,7 @@
 let __cache = null;
 
 /**
- * Access class for the `ranvier.json` config
+ * Access class for the `gemstone.json` config
  */
 class Config {
   /**
@@ -15,7 +15,7 @@ class Config {
   }
 
   /**
-   * Load `ranvier.json` from disk
+   * Load `gemstonegemstone.json` from disk
    */
   static load(data) {
     __cache = data;
