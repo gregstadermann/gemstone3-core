@@ -59,6 +59,7 @@ class EffectFactory {
    * @return {Effect}
    */
   create(id, config = {}, state = {}) {
+    console.log('id ', id, 'config ', config, 'state ', state);
     const entry = this.effects.get(id);
     if (!entry || !entry.definition) {
       throw new Error(`No valid entry definition found for effect ${id}.`);

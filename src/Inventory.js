@@ -66,7 +66,7 @@ class Inventory extends Map {
       items: [],
       max: this.maxSize
     };
-
+   //console.log('Inventory.js: this.size: ' + this.size + ' this.maxSize: ' + this.maxSize + ' this: ' + JSON.stringify(this));
     for (const [uuid, item] of this) {
       if (!(item instanceof Item)) {
         this.delete(uuid);

@@ -112,7 +112,7 @@ class Room extends GameEntity {
 
   /**
    * @param {Npc} npc
-   * @param {boolean} removeSpawn 
+   * @param {boolean} removeSpawn
    */
   removeNpc(npc, removeSpawn = false) {
     this.npcs.delete(npc);
@@ -327,6 +327,7 @@ class Room extends GameEntity {
    */
   spawnNpc(state, entityRef) {
     Logger.verbose(`\tSPAWN: Adding npc [${entityRef}] to room [${this.title}]`);
+    //console.log(entityRef);
     const newNpc = state.MobFactory.create(this.area, entityRef);
     newNpc.hydrate(state);
     newNpc.sourceRoom = this;
@@ -337,6 +338,7 @@ class Room extends GameEntity {
      * @event Npc#spawn
      */
     newNpc.emit('spawn');
+
     return newNpc;
   }
 

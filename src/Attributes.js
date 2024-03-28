@@ -44,7 +44,6 @@ class Attributes extends Map
     [...this].forEach(([name, attribute]) => {
       data[name] = attribute.serialize();
     });
-
     return data;
   }
 }

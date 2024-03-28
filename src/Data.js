@@ -54,7 +54,6 @@ class Data {
       '.yml': yaml.safeDump,
       '.yaml': yaml.safeDump,
       '.json': function(data) {
-        //Make it prettttty
         return JSON.stringify(data, null, 2);
       }
     };

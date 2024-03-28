@@ -58,7 +58,7 @@ class Logger {
     if (!path.endsWith(logExt)) {
       path += logExt;
     }
-    console.log("Adding file logging at " + path);
+    //console.log("Adding file logging at " + path);
     winston.add(winston.transports.File, { filename: path, timestamp: true });
   }
 

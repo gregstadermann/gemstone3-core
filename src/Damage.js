@@ -13,6 +13,7 @@ class Damage {
    * @param {number} amount
    * @param {Character} [attacker=null] Character causing the damage
    * @param {*} [source=null] Where the damage came from: skill, item, room, etc.
+   * @param metadata
    * @property {Object} metadata Extra info about the damage: type, hidden, critical, etc.
    */
   constructor(attribute, amount, attacker = null, source = null, metadata = {}) {
@@ -29,6 +30,7 @@ class Damage {
     this.amount = amount;
     this.source = source;
     this.metadata = metadata;
+    //console.log('Damage constructor, attribute, amount, attacker, source, metadata: ' + this.attribute + ' ' + this.amount + ' ' + this.attacker +  ' ' + this.source + ' ' + Object.keys(this.metadata));
   }
 
   /**
@@ -63,7 +65,8 @@ class Damage {
        * @param {Character} target
        * @param {Number} finalAmount
        */
-      this.attacker.emit('hit', this, target, finalAmount);
+      //console.log(`[Damage.js] ${this.attacker.name} hits ${target.name} for ${finalAmount} damage.`);
+      this.attacker.emit('hit', this, target, finalAmount, this.metadata);
     }
       /**
        * @event Character#damaged

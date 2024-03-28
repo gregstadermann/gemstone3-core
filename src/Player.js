@@ -31,6 +31,25 @@ class Player extends Character {
     this.password  = data.password;
     this.prompt = data.prompt || '> ';
     this.socket = data.socket || null;
+    this.sex = data.sex || null;
+    this.race = data.race || null;
+    this.tps = data.tps || 0;
+    this.manaStat = data.manaStat || null;
+    this.mana = data.mana || null;
+    this.height = data.height || null;
+    this.weight = data.weight || null;
+    this.skinTone = data.skinTone || null;
+    this.hairColor = data.hairColor || null;
+    this.hairQuirk = data.hairQuirk || null;
+    this.hairStyle = data.hairStyle || null;
+    this.hairTexture = data.hairTexture || null;
+    this.eyeColor = data.eyeColor || null;
+    this.eyeTrait = data.eyeTrait || null;
+    this.faceFeature = data.faceFeature || null;
+    this.noseDetail = data.noseDetail || null;
+    this.distinguishingMark = data.distinguishingMark || null;
+
+
     const questData = Object.assign({
       completed: [],
       active: []
@@ -221,12 +240,30 @@ class Player extends Character {
     let data = Object.assign(super.serialize(), {
       account: this.account.name,
       experience: this.experience,
+      experiencePool: this.experiencePool,
       inventory: this.inventory && this.inventory.serialize(),
       metadata: this.metadata,
       password: this.password,
       prompt: this.prompt,
       quests: this.questTracker.serialize(),
       role: this.role,
+      tps: this.tps,
+      race: this.race,
+      sex: this.sex,
+      manaStat: this.manaStat,
+      eyeColor: this.eyeColor,
+      eyeTrait: this.eyeTrait,
+      hairColor: this.hairColor,
+      hairQuirk: this.hairQuirk,
+      hairTexture: this.hairTexture,
+      hairStyle: this.hairStyle,
+      faceFeature: this.faceFeature,
+      noseDetail: this.noseDetail,
+      distinguishingMark: this.distinguishingMark,
+      skinTone: this.skinTone,
+      weight: this.weight,
+      height: this.height,
+      mana: this.mana
     });
 
     if (this.equipment instanceof Map) {

@@ -217,6 +217,7 @@ class Broadcast {
       openColor = `<${color}>`;
       closeColor = `</${color}>`;
     }
+    //console.log (openColor + (new Array(width + 1)).join(fillChar) + closeColor);
     return openColor + (new Array(width + 1)).join(fillChar) + closeColor;
   }
 

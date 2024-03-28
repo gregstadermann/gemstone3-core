@@ -22,8 +22,8 @@ class Attribute {
    * @param {object} metadata={}
    */
   constructor(name, base, delta = 0, formula = null, metadata = {}) {
-    if (isNaN(base)) { 
-      throw new TypeError(`Base attribute must be a number, got ${base}.`); 
+    if (isNaN(base)) {
+      throw new TypeError(`Base attribute must be a number, got ${base}.`);
     }
     if (isNaN(delta)) {
       throw new TypeError(`Attribute delta must be a number, got ${delta}.`);
@@ -32,11 +32,29 @@ class Attribute {
       throw new TypeError('Attribute formula must be instance of AttributeFormula');
     }
 
+    const calcBonus = function(ranks) {
+        if(ranks < 10) {
+          return ranks * 5;
+        }else if(ranks < 20) {
+          return 50 + (ranks - 10) * 3;
+        }else if(ranks < 30) {
+          return 80 + (ranks - 20) * 2;
+        }else if(ranks >= 30) {
+          return 100 + (ranks - 30) * 1;
+        }
+        return 0;
+    };
+
     this.name = name;
     this.base = base;
     this.delta = delta;
     this.formula = formula;
     this.metadata = metadata;
+    this.bonus = calcBonus(this.base);
+  }
+
+  getBonus() {
+    return this.bonus;
   }
 
   /**

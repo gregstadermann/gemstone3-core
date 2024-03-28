@@ -1,6 +1,7 @@
 'use strict';
 
 const Attributes = require('./Attributes');
+const PlayerRace = require('../../gemstone3/bundles/input-events/lib/PlayerRace');
 const Config = require('./Config');
 const EffectList = require('./EffectList');
 const { EquipSlotTakenError, EquipAlreadyEquippedError } = require('./EquipErrors');
@@ -28,7 +29,6 @@ const Logger = require('./Logger');
 class Character extends Metadatable(EventEmitter) {
   constructor(data) {
     super();
-
     this.name = data.name;
     this.inventory = new Inventory(data.inventory || {});
     this.equipment = data.equipment || new Map();
@@ -37,6 +37,7 @@ class Character extends Metadatable(EventEmitter) {
     this.level = data.level || 1;
     this.room = data.room || null;
     this.attributes = data.attributes || new Attributes();
+    this.stance = data.stance || 'neutral';
 
     this.followers = new Set();
     this.following = null;
@@ -60,7 +61,6 @@ class Character extends Metadatable(EventEmitter) {
    */
   emit(event, ...args) {
     super.emit(event, ...args);
-
     this.effects.emit(event, ...args);
   }
 
@@ -69,6 +69,8 @@ class Character extends Metadatable(EventEmitter) {
    * @return {boolean}
    */
   hasAttribute(attr) {
+    //console.log('this.attributes type: ', typeof(this.attributes));
+    //console.log('Character.js: hasAttribute: ' + attr + ' ' + this.attributes.has(attr));
     return this.attributes.has(attr);
   }
 
@@ -117,6 +119,49 @@ class Character extends Metadatable(EventEmitter) {
 
     return this.getMaxAttribute(attr) + this.attributes.get(attr).delta;
   }
+
+  getStatBonus(attr, race) {
+    let baseStat = this.getMaxAttribute(attr);
+    let allRaceStatBonuses = PlayerRace.getRaces();
+    let playerRaceBonuses = allRaceStatBonuses[race];
+    let raceBonus = playerRaceBonuses.statBonusModifiers[attr];
+    let bonus =((baseStat-50)/2) + (raceBonus);
+    bonus = parseInt(bonus);
+    return bonus;
+  }
+
+  /**
+   * Get the bonus value of a skill (5 * ranks)
+   * @param attr
+   * @returns {number}
+   */
+  getSkillBonus(attr) {
+    if (!this.hasAttribute(attr)) {
+      throw new RangeError(`Character does not have the skill [${attr}]`);
+    }
+
+    let ranks = this.attributes.get(attr).base;
+    if(ranks <= 10){
+      return ranks * 5;
+    }
+    if(ranks > 10 && ranks <= 20) {
+      let remainder = ranks - 10;
+      return 50 + (remainder * 4);
+    }
+    if(ranks > 20 && ranks <= 30) {
+      let remainder = ranks - 20;
+      return 90 + (remainder * 3);
+    }
+    if(ranks > 30 && ranks <= 40) {
+      let remainder = ranks - 30;
+      return 120 + (remainder * 2);
+    }
+    if(ranks > 40) {
+      let remainder = ranks - 40;
+      return 140 + (remainder * 1);
+    }
+  }
+
 
   /**
    * Get the base value for a given attribute
@@ -195,6 +240,8 @@ class Character extends Metadatable(EventEmitter) {
    * @fires Character#attributeUpdate
    */
   setAttributeBase(attr, newBase) {
+    console.log('Character.js: setAttributeBase: ' + attr + ' newBase: ' + newBase);
+    console.log(typeof(this.attributes));
     if (!this.hasAttribute(attr)) {
       throw new Error(`Invalid attribute ${attr}`);
     }
@@ -237,9 +284,9 @@ class Character extends Metadatable(EventEmitter) {
   initiateCombat(target, lag = 0) {
     if (!this.isInCombat()) {
       this.combatData.lag = lag;
-      Logger.verbose(`[Character.js] initiateCombat() Lag:${this.combatData.lag}`);
       this.combatData.roundStarted = Date.now();
-      Logger.verbose(`[Character.js] initiateCombat() Round started:${this.combatData.roundStarted}`);
+      Logger.verbose(`[Character.js] ${this.name} has Lag:${this.combatData.lag} after attacking ${target.name}`);
+      //Logger.verbose(`[Character.js] ${this.name} has Round started:${this.combatData.roundStarted}`);
 
       //Logger.verbose(`[Character.js] Combat started for ${this.name} with ${target.name}`);
       /**
@@ -431,6 +478,7 @@ class Character extends Metadatable(EventEmitter) {
    * @param {Item} item
    */
   addItem(item) {
+    //console.log('Character.js: addItem: ' + item.name + ' added to ' + this.name + ' inventory');
     this._setupInventory();
     this.inventory.addItem(item);
     item.carriedBy = this;
@@ -483,11 +531,14 @@ class Character extends Metadatable(EventEmitter) {
    */
   _setupInventory() {
     this.inventory = this.inventory || new Inventory();
-    //console.log('this.inventory: ', this.inventory);
+    console.log('This inventory ', this.inventory);
     //console.log('this.inventory.getMax(): ', this.inventory.getMax());
     // Default max inventory size config
-    if (!this.isNpc && !isFinite(this.inventory.getMax())) {
-      this.inventory.setMax(Config.get('defaultMaxPlayerInventory') || 2);
+    if (!this.isNpc) {
+      //this.inventory.setMax(Config.get('defaultMaxPlayerInventory') || 2);
+      //console.log(this.name + ' inventory size: ' + this.inventory.size + '/' + this.inventory.maxSize);
+      this.inventory.maxSize = 2;
+      //console.log(this.name + 'inventory size: ' + this.inventory.size + '/' + this.inventory.maxSize);
     }
   }
 

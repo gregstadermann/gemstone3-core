@@ -107,7 +107,6 @@ class BundleManager {
       { path: 'server-events/', fn: 'loadServerEvents' },
       { path: 'player-events.js', fn: 'loadPlayerEvents' },
       { path: 'skills/', fn: 'loadSkills' },
-      { path: 'critsCrush/', fn: 'loadCritsCrush'},
     ];
 
     Logger.verbose(`LOAD: BUNDLE [\x1B[1;33m${bundle}\x1B[0m] START`);
@@ -432,8 +431,6 @@ class BundleManager {
     );
   }
 
-  loadCritsCrush(bundle) {
-  }
   /**
    * @param {string} bundle
    * @param {string} channelsFile

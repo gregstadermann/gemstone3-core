@@ -4,6 +4,7 @@ const uuid = require('uuid/v4');
 
 const GameEntity = require('./GameEntity');
 const ItemType = require('./ItemType');
+const WeaponType = require('./WeaponType');
 const Logger = require('./Logger');
 const Metadatable = require('./Metadatable');
 const Player = require('./Player');
@@ -67,6 +68,11 @@ class Item extends GameEntity {
     } else {
       this.type = item.type || ItemType.OBJECT;
     }
+    if (typeof item.weaponType === 'string') {
+      this.weaponType = WeaponType[item.weaponType] || item.weaponType;
+    } else {
+      this.weaponType = item.weaponType || WeaponType.BRAWLING;
+    }
 
     this.uuid        = item.uuid || uuid();
     this.closeable   = item.closeable || item.closed || item.locked || false;
@@ -86,9 +92,7 @@ class Item extends GameEntity {
     if (inventory) {
       this.inventory = new Inventory(inventory);
       this.inventory.setMax(this.maxItems);
-    } else {
-      this.inventory = null;
-    }
+    } else { this.inventory = null; }
   }
 
   hasKeyword(keyword) {
@@ -127,6 +131,7 @@ class Item extends GameEntity {
    */
   isInventoryFull() {
     this._setupInventory();
+    //console.log("Item.js: isInventoryFull: " + this.inventory.isFull);
     return this.inventory.isFull;
   }
 
